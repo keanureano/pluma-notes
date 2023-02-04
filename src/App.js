@@ -23,6 +23,8 @@ function App() {
   const addNote = async (event) => {
     event.preventDefault();
     await addDoc(collection(db, "notes"), { title: newTitle, text: newText });
+    setNewTitle("");
+    setNewText("");
   };
   const deleteNote = async (event) => {
     const noteDoc = doc(db, "notes", event.target.dataset.id);
@@ -80,7 +82,11 @@ function Notes({ notes, deleteNote }) {
         return (
           <div className="col-4 card p-0" key={note.id}>
             <div className="card-body">
-              <button className="btn-close float-end" data-id={note.id} onClick={deleteNote} />
+              <button
+                className="btn-close float-end"
+                data-id={note.id}
+                onClick={deleteNote}
+              />
               <h1>{note.title}</h1>
               <p>{note.text}</p>
             </div>
