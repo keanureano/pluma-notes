@@ -22,9 +22,11 @@ function App() {
   };
   const addNote = async (event) => {
     event.preventDefault();
-    await addDoc(collection(db, "notes"), { title: newTitle, text: newText });
+    const title = newTitle;
+    const text = newText;
     setNewTitle("");
     setNewText("");
+    await addDoc(collection(db, "notes"), { title: title, text: text });
   };
   const deleteNote = async (event) => {
     const noteDoc = doc(db, "notes", event.target.dataset.id);
