@@ -53,7 +53,7 @@ function App() {
 
 function Form({ addNote, newTitle, newText, onTitleChange, onTextChange }) {
   return (
-    <div className="debug">
+    <div>
       <form onSubmit={addNote}>
         <input
           type="text"
@@ -78,7 +78,7 @@ function Notes({ notes, deleteNote }) {
     <div>
       {notes.map((note) => {
         return (
-          <div className="debug" key={note.id}>
+          <div key={note.id}>
             <button data-id={note.id} onClick={deleteNote}>
               x
             </button>
