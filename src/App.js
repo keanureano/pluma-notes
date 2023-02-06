@@ -38,7 +38,7 @@ function App() {
   }, []);
 
   return (
-    <div className="container">
+    <div>
       <Notes notes={notes} deleteNote={deleteNote} />
       <Form
         newTitle={newTitle}
@@ -53,43 +53,37 @@ function App() {
 
 function Form({ addNote, newTitle, newText, onTitleChange, onTextChange }) {
   return (
-    <form className="col-3" onSubmit={addNote}>
-      <input
-        type="text"
-        className="form-control mt-1"
-        placeholder="title"
-        value={newTitle}
-        onChange={onTitleChange}
-      />
-      <input
-        type="text"
-        className="form-control mt-1"
-        placeholder="text"
-        value={newText}
-        onChange={onTextChange}
-      />
-      <button type="submit" className="btn btn-primary mt-1">
-        Add Note
-      </button>
-    </form>
+    <div className="debug">
+      <form onSubmit={addNote}>
+        <input
+          type="text"
+          placeholder="title"
+          value={newTitle}
+          onChange={onTitleChange}
+        />
+        <input
+          type="text"
+          placeholder="text"
+          value={newText}
+          onChange={onTextChange}
+        />
+        <button type="submit">Add Note</button>
+      </form>
+    </div>
   );
 }
 
 function Notes({ notes, deleteNote }) {
   return (
-    <div className="row gx-5">
+    <div>
       {notes.map((note) => {
         return (
-          <div className="col-4 card p-0" key={note.id}>
-            <div className="card-body">
-              <button
-                className="btn-close float-end"
-                data-id={note.id}
-                onClick={deleteNote}
-              />
-              <h1>{note.title}</h1>
-              <p>{note.text}</p>
-            </div>
+          <div className="debug" key={note.id}>
+            <button data-id={note.id} onClick={deleteNote}>
+              x
+            </button>
+            <h1>{note.title}</h1>
+            <p>{note.text}</p>
           </div>
         );
       })}
