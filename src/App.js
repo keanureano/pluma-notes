@@ -4,6 +4,7 @@ import {
   collection,
   onSnapshot,
   doc,
+  getDocs,
   addDoc,
   deleteDoc,
 } from "firebase/firestore";
@@ -20,28 +21,30 @@ function App() {
   const onTextChange = (event) => {
     setNewText(event.target.value);
   };
-  const addNote = async (event) => {
+  const getNotes = async () => {
+    console.log("get");
+    const snapshot = await getDocs(collection(db, "notes"));
+    setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+  const addNote = (event) => {
     event.preventDefault();
-    const title = newTitle;
-    const text = newText;
     setNewTitle("");
     setNewText("");
-    await addDoc(collection(db, "notes"), { title: title, text: text });
+    addDoc(collection(db, "notes"), { title: newTitle, text: newText });
+    getNotes();
   };
-  const deleteNote = async (event) => {
+  const deleteNote = (event) => {
     const noteDoc = doc(db, "notes", event.target.dataset.id);
-    await deleteDoc(noteDoc);
+    deleteDoc(noteDoc);
+    getNotes();
   };
 
   useEffect(() => {
-    onSnapshot(collection(db, "notes"), (data) => {
-      setNotes(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    });
+    getNotes();
   }, []);
 
   return (
     <div>
-      <Notes notes={notes} deleteNote={deleteNote} />
       <Form
         newTitle={newTitle}
         newText={newText}
@@ -49,6 +52,7 @@ function App() {
         onTextChange={onTextChange}
         addNote={addNote}
       />
+      <Notes notes={notes} deleteNote={deleteNote} />
     </div>
   );
 }
