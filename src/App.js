@@ -62,7 +62,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="app">
       <AddNote addNote={addNote} />
       <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
     </div>
@@ -71,7 +71,7 @@ function App() {
 
 function AddNote({ addNote }) {
   return (
-    <div>
+    <div className="addNote">
       <button onClick={addNote}>Add Note</button>
     </div>
   );
@@ -79,38 +79,40 @@ function AddNote({ addNote }) {
 
 function Notes({ notes, deleteNote, editNote }) {
   return (
-    <div>
+    <div className="notes">
       {notes.map((note) => {
         return (
-          <div key={note.id} className="note">
-            <button onClick={deleteNote} value={note.id}>
-              x
-            </button>
-            <form
-              onSubmit={editNote}
-              onBlur={(e) => e.target.form.requestSubmit()}
-            >
-              <input name="id" type="hidden" value={note.id} />
-              <input
-                name="title"
-                placeholder="Title"
-                defaultValue={note.title}
-              />
-              <textarea
-                rows="10"
-                cols="21"
-                name="text"
-                placeholder="Note"
-                defaultValue={note.text}
-              />
-            </form>
-          </div>
+          <Note
+            key={note.id}
+            note={note}
+            deleteNote={deleteNote}
+            editNote={editNote}
+          />
         );
       })}
     </div>
   );
 }
 
-function Note({ note }) {}
+function Note({ note, deleteNote, editNote }) {
+  return (
+    <div className="note">
+      <button onClick={deleteNote} value={note.id}>
+        x
+      </button>
+      <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
+        <input name="id" type="hidden" value={note.id} />
+        <input name="title" placeholder="Title" defaultValue={note.title} />
+        <textarea
+          rows="10"
+          cols="21"
+          name="text"
+          placeholder="Note"
+          defaultValue={note.text}
+        />
+      </form>
+    </div>
+  );
+}
 
 export default App;
