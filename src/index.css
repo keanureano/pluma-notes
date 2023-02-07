@@ -1,5 +1,14 @@
-.note {
+.auth {
   margin: 10px;
+}
+
+.content {
+  margin: 10px;
+}
+
+.note,
+.addNote {
+  margin-top: 10px;
 }
 
 .note input,

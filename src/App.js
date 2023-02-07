@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { db } from "./firebase-config";
+import { db, auth, loginUser, logoutUser } from "./firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   doc,
@@ -14,7 +15,7 @@ import {
 
 function App() {
   const [notes, setNotes] = useState([]);
-
+  const [user, setUser] = useState(null);
   const getNotes = async () => {
     const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
     const snapshot = await getDocs(q);
@@ -56,13 +57,44 @@ function App() {
     updateDoc(doc(db, "notes", noteId), editedNote);
     console.log("updated note", noteId);
   };
-
   useEffect(() => {
     getNotes();
+    onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
   }, []);
-
   return (
     <div className="app">
+      <Auth user={user} />
+      <Content
+        user={user}
+        addNote={addNote}
+        notes={notes}
+        deleteNote={deleteNote}
+        editNote={editNote}
+      />
+    </div>
+  );
+}
+
+function Auth({ user }) {
+  return (
+    <div className="auth">
+      {user ? (
+        <button onClick={logoutUser}>Logout {user.displayName}</button>
+      ) : (
+        <button onClick={loginUser}>Sign In With Google</button>
+      )}
+    </div>
+  );
+}
+
+function Content({ user, addNote, notes, deleteNote, editNote }) {
+  if (!user) {
+    return null;
+  }
+  return (
+    <div className="content">
       <AddNote addNote={addNote} />
       <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
     </div>
