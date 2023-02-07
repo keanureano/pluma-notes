@@ -21,18 +21,24 @@ function App() {
   const getNotes = async () => {
     const q = query(
       collection(db, "notes"),
-      where("owner", "==", user.uid),
+      where("owner.id", "==", user.uid),
       orderBy("timestamp", "desc")
     );
     const snapshot = await getDocs(q);
     setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     console.log("get note");
   };
+  const getAllNotes = async () => {
+    const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
+    const snapshot = await getDocs(q);
+    setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    console.log("get all notes");
+  };
   const addNote = () => {
     addDoc(collection(db, "notes"), {
       title: "",
       text: "",
-      owner: user.uid,
+      owner: { id: user.uid, name: user.displayName },
       timestamp: Timestamp.now().seconds,
     });
     getNotes();
@@ -83,6 +89,7 @@ function App() {
     return (
       <MainPage
         user={user}
+        getAllNotes={getAllNotes}
         addNote={addNote}
         notes={notes}
         deleteNote={deleteNote}
@@ -92,24 +99,31 @@ function App() {
   }
 }
 
-function MainPage({ user, addNote, notes, deleteNote, editNote }) {
+function MainPage({ user, getAllNotes, addNote, notes, deleteNote, editNote }) {
   return (
     <div className="main">
       <div>
         <button onClick={logoutUser}>Logout {user.displayName}</button>
+        <button onClick={getAllNotes}>See all user notes (For test purposes only)</button>
       </div>
       <button onClick={addNote}>Add Note</button>
-      <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
+      <Notes
+        user={user}
+        notes={notes}
+        deleteNote={deleteNote}
+        editNote={editNote}
+      />
     </div>
   );
 }
 
-function Notes({ notes, deleteNote, editNote }) {
+function Notes({ user, notes, deleteNote, editNote }) {
   return (
     <div className="notes">
       {notes.map((note) => {
         return (
           <Note
+            user={user}
             key={note.id}
             note={note}
             deleteNote={deleteNote}
@@ -121,16 +135,33 @@ function Notes({ notes, deleteNote, editNote }) {
   );
 }
 
-function Note({ note, deleteNote, editNote }) {
+function Note({ user, note, deleteNote, editNote }) {
+  console.log();
   return (
     <div className="note">
-      <button onClick={deleteNote} value={note.id}>
+      <button
+        onClick={deleteNote}
+        value={note.id}
+        hidden={user.uid !== note.owner.id}
+      >
         x
       </button>
+
       <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
+        owner: {note.owner.name}
         <input name="id" type="hidden" value={note.id} />
-        <input name="title" placeholder="Title" defaultValue={note.title} />
-        <textarea name="text" placeholder="Note" defaultValue={note.text} />
+        <input
+          name="title"
+          placeholder="Title"
+          defaultValue={note.title}
+          disabled={note.owner.id !== user.uid}
+        />
+        <textarea
+          name="text"
+          placeholder="Note"
+          defaultValue={note.text}
+          disabled={note.owner.id !== user.uid}
+        />
       </form>
     </div>
   );

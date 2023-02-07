@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 // use emulator
-connectFirestoreEmulator(db, "localhost", 8080);
+//connectFirestoreEmulator(db, "localhost", 8080);
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
