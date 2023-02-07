@@ -24,7 +24,7 @@ function App() {
     setNewText(event.target.value);
   };
   const getNotes = async () => {
-    const q = query(collection(db, "notes"), orderBy("timestamp"));
+    const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
     const snapshot = await getDocs(q);
     setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
