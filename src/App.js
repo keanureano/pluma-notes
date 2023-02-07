@@ -30,19 +30,19 @@ function App() {
   };
   const addNote = (event) => {
     event.preventDefault();
-    setNewTitle("");
-    setNewText("");
     addDoc(collection(db, "notes"), {
       title: newTitle,
       text: newText,
       timestamp: Timestamp.now().seconds,
     });
+    setNewTitle("");
+    setNewText("");
     getNotes();
   };
   const deleteNote = (id) => {
     const noteDoc = doc(db, "notes", id);
     deleteDoc(noteDoc);
-    getNotes();
+    setNotes(notes.filter((note) => (note.id === noteDoc.id ? null : note)));
   };
 
   useEffect(() => {
