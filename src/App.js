@@ -14,30 +14,20 @@ import {
 
 function App() {
   const [notes, setNotes] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [newText, setNewText] = useState("");
 
-  const onTitleChange = (event) => {
-    setNewTitle(event.target.value);
-  };
-  const onTextChange = (event) => {
-    setNewText(event.target.value);
-  };
+
   const getNotes = async () => {
     const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
     const snapshot = await getDocs(q);
     setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     console.log("get note");
   };
-  const addNote = (event) => {
-    event.preventDefault();
+  const addNote = () => {
     addDoc(collection(db, "notes"), {
-      title: newTitle,
-      text: newText,
+      title: "",
+      text: "",
       timestamp: Timestamp.now().seconds,
     });
-    setNewTitle("");
-    setNewText("");
     getNotes();
     console.log("added note");
   };
@@ -73,11 +63,7 @@ function App() {
 
   return (
     <div>
-      <Form
-        newTitle={newTitle}
-        newText={newText}
-        onTitleChange={onTitleChange}
-        onTextChange={onTextChange}
+      <AddNote
         addNote={addNote}
       />
       <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
@@ -85,14 +71,10 @@ function App() {
   );
 }
 
-function Form({ addNote, newTitle, newText, onTitleChange, onTextChange }) {
+function AddNote({ addNote }) {
   return (
     <div>
-      <form onSubmit={addNote}>
-        <input placeholder="title" value={newTitle} onChange={onTitleChange} />
-        <input placeholder="text" value={newText} onChange={onTextChange} />
-        <button type="submit">add Note</button>
-      </form>
+      <button onClick={addNote}>add Note</button>
     </div>
   );
 }
