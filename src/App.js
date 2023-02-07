@@ -10,7 +10,6 @@ import {
   orderBy,
   Timestamp,
 } from "firebase/firestore";
-import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
   const [notes, setNotes] = useState([]);
