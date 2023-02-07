@@ -1,4 +1,8 @@
-* {
-  outline: 0px solid red;
-  outline-offset: -1px;
+.note {
+  margin: 10px;
+}
+
+.note input,
+.note textarea {
+  display: block;
 }

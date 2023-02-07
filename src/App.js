@@ -15,7 +15,6 @@ import {
 function App() {
   const [notes, setNotes] = useState([]);
 
-
   const getNotes = async () => {
     const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
     const snapshot = await getDocs(q);
@@ -31,11 +30,12 @@ function App() {
     getNotes();
     console.log("added note");
   };
-  const deleteNote = (id) => {
-    const noteDoc = doc(db, "notes", id);
+  const deleteNote = (event) => {
+    const noteId = event.target.value;
+    const noteDoc = doc(db, "notes", noteId);
     deleteDoc(noteDoc);
     setNotes(notes.filter((note) => (note.id === noteDoc.id ? null : note)));
-    console.log("deleted note");
+    console.log("deleted note", noteId);
   };
   const editNote = (event) => {
     event.preventDefault();
@@ -54,7 +54,7 @@ function App() {
       return;
     }
     updateDoc(doc(db, "notes", noteId), editedNote);
-    console.log("updated note");
+    console.log("updated note", noteId);
   };
 
   useEffect(() => {
@@ -63,9 +63,7 @@ function App() {
 
   return (
     <div>
-      <AddNote
-        addNote={addNote}
-      />
+      <AddNote addNote={addNote} />
       <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
     </div>
   );
@@ -74,7 +72,7 @@ function App() {
 function AddNote({ addNote }) {
   return (
     <div>
-      <button onClick={addNote}>add Note</button>
+      <button onClick={addNote}>Add Note</button>
     </div>
   );
 }
@@ -84,19 +82,26 @@ function Notes({ notes, deleteNote, editNote }) {
     <div>
       {notes.map((note) => {
         return (
-          <div key={note.id}>
-            <button onClick={() => deleteNote(note.id)}>x</button>
-            <form onSubmit={editNote}>
+          <div key={note.id} className="note">
+            <button onClick={deleteNote} value={note.id}>
+              x
+            </button>
+            <form
+              onSubmit={editNote}
+              onBlur={(e) => e.target.form.requestSubmit()}
+            >
               <input name="id" type="hidden" value={note.id} />
               <input
                 name="title"
+                placeholder="Title"
                 defaultValue={note.title}
-                onBlur={(e) => e.target.form.requestSubmit()}
               />
-              <input
+              <textarea
+                rows="10"
+                cols="21"
                 name="text"
+                placeholder="Note"
                 defaultValue={note.text}
-                onBlur={(e) => e.target.form.requestSubmit()}
               />
             </form>
           </div>
@@ -105,5 +110,7 @@ function Notes({ notes, deleteNote, editNote }) {
     </div>
   );
 }
+
+function Note({ note }) {}
 
 export default App;
