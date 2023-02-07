@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { db } from "./firebase-config";
 import {
   collection,
-  onSnapshot,
   doc,
   getDocs,
   addDoc,
   deleteDoc,
+  query,
+  orderBy,
+  Timestamp,
 } from "firebase/firestore";
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -22,19 +24,23 @@ function App() {
     setNewText(event.target.value);
   };
   const getNotes = async () => {
-    console.log("get");
-    const snapshot = await getDocs(collection(db, "notes"));
+    const q = query(collection(db, "notes"), orderBy("timestamp"));
+    const snapshot = await getDocs(q);
     setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
   const addNote = (event) => {
     event.preventDefault();
     setNewTitle("");
     setNewText("");
-    addDoc(collection(db, "notes"), { title: newTitle, text: newText });
+    addDoc(collection(db, "notes"), {
+      title: newTitle,
+      text: newText,
+      timestamp: Timestamp.now().seconds,
+    });
     getNotes();
   };
-  const deleteNote = (event) => {
-    const noteDoc = doc(db, "notes", event.target.dataset.id);
+  const deleteNote = (id) => {
+    const noteDoc = doc(db, "notes", id);
     deleteDoc(noteDoc);
     getNotes();
   };
@@ -85,10 +91,8 @@ function Notes({ notes, deleteNote }) {
       {notes.map((note) => {
         return (
           <div key={note.id}>
-            <button data-id={note.id} onClick={deleteNote}>
-              x
-            </button>
-            <h1>{note.title}</h1>
+            <button onClick={() => deleteNote(note.id)}>x</button>
+            <h6>{note.title}</h6>
             <p>{note.text}</p>
           </div>
         );
