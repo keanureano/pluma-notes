@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, auth, loginUser, logoutUser } from "./firebase-config";
-import { onAuthStateChanged } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import {
   collection,
   doc,
@@ -9,15 +9,21 @@ import {
   deleteDoc,
   updateDoc,
   query,
+  where,
   orderBy,
   Timestamp,
 } from "firebase/firestore";
 
 function App() {
   const [notes, setNotes] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, loading, error] = useAuthState(auth);
+
   const getNotes = async () => {
-    const q = query(collection(db, "notes"), orderBy("timestamp", "desc"));
+    const q = query(
+      collection(db, "notes"),
+      where("owner", "==", user.uid),
+      orderBy("timestamp", "desc")
+    );
     const snapshot = await getDocs(q);
     setNotes(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     console.log("get note");
@@ -26,6 +32,7 @@ function App() {
     addDoc(collection(db, "notes"), {
       title: "",
       text: "",
+      owner: user.uid,
       timestamp: Timestamp.now().seconds,
     });
     getNotes();
@@ -58,53 +65,41 @@ function App() {
     console.log("updated note", noteId);
   };
   useEffect(() => {
-    getNotes();
-    onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-  }, []);
-  return (
-    <div className="app">
-      <Auth user={user} />
-      <Content
+    if (user) {
+      getNotes();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  if (loading) {
+    return <LoadingPage />;
+  }
+  if (error) {
+    return <ErrorPage message={error} />;
+  }
+  if (!user) {
+    return <LoginPage />;
+  }
+  if (user) {
+    return (
+      <MainPage
         user={user}
         addNote={addNote}
         notes={notes}
         deleteNote={deleteNote}
         editNote={editNote}
       />
-    </div>
-  );
-}
-
-function Auth({ user }) {
-  return (
-    <div className="auth">
-      {user ? (
-        <button onClick={logoutUser}>Logout {user.displayName}</button>
-      ) : (
-        <button onClick={loginUser}>Sign In With Google</button>
-      )}
-    </div>
-  );
-}
-
-function Content({ user, addNote, notes, deleteNote, editNote }) {
-  if (!user) {
-    return null;
+    );
   }
-  return (
-    <div className="content">
-      <AddNote addNote={addNote} />
-      <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
-    </div>
-  );
 }
 
-function AddNote({ addNote }) {
+function MainPage({ user, addNote, notes, deleteNote, editNote }) {
   return (
-    <div className="addNote">
+    <div className="main">
+      <div>
+        <button onClick={logoutUser}>Logout {user.displayName}</button>
+      </div>
       <button onClick={addNote}>Add Note</button>
+      <Notes notes={notes} deleteNote={deleteNote} editNote={editNote} />
     </div>
   );
 }
@@ -135,16 +130,22 @@ function Note({ note, deleteNote, editNote }) {
       <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
         <input name="id" type="hidden" value={note.id} />
         <input name="title" placeholder="Title" defaultValue={note.title} />
-        <textarea
-          rows="10"
-          cols="21"
-          name="text"
-          placeholder="Note"
-          defaultValue={note.text}
-        />
+        <textarea name="text" placeholder="Note" defaultValue={note.text} />
       </form>
     </div>
   );
+}
+
+function LoadingPage() {
+  return null;
+}
+
+function ErrorPage({ message }) {
+  return <div>error: {message}</div>;
+}
+
+function LoginPage() {
+  return <button onClick={loginUser}>Sign In With Google</button>;
 }
 
 export default App;

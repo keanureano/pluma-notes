@@ -1,17 +1,9 @@
-.auth {
-  margin: 10px;
-}
-
-.content {
-  margin: 10px;
-}
-
-.note,
-.addNote {
+.note {
   margin-top: 10px;
 }
 
 .note input,
 .note textarea {
   display: block;
+  width: 25%;
 }
