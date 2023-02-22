@@ -10,12 +10,12 @@ export default function HomePage({
   return (
     <div>
       <div>
-        <button className="btn btn-sm btn-secondary m-1" onClick={logoutUser}>Logout {user.displayName}</button>
-        <button className="btn btn-sm btn-secondary m-1" onClick={getAllNotes}>
+        <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>Logout {user.displayName}</button>
+        <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
           See all user notes (For test purposes only)
         </button>
       </div>
-      <button className="btn btn-sm btn-secondary m-1" onClick={addNote}>Add Note</button>
+      <button className="btn btn-sm btn-dark m-1" onClick={addNote}>Add Note</button>
       <Notes
         user={user}
         notes={notes}
