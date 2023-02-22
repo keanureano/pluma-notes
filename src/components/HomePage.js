@@ -8,7 +8,7 @@ export default function HomePage({
   logoutUser,
 }) {
   return (
-    <div>
+    <div class="container">
       <div>
         <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>Logout {user.displayName}</button>
         <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
@@ -28,7 +28,7 @@ export default function HomePage({
 
 function Notes({ user, notes, deleteNote, editNote }) {
   return (
-    <div class="row">
+    <div class="container row">
       {notes.map((note) => {
         return (
           <Note
@@ -47,7 +47,7 @@ function Notes({ user, notes, deleteNote, editNote }) {
 function Note({ user, note, deleteNote, editNote }) {
   console.log();
   return (
-    <div className="card col-12">
+    <div className="card col-12 col-md-4 mx-0 mx-md-3 my-2">
       <div class="card-body">
         <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
           <label for="id" class="form-label">
