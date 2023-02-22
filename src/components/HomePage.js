@@ -8,14 +8,14 @@ export default function HomePage({
   logoutUser,
 }) {
   return (
-    <div className="main">
+    <div>
       <div>
-        <button onClick={logoutUser}>Logout {user.displayName}</button>
-        <button onClick={getAllNotes}>
+        <button className="btn btn-sm btn-secondary m-1" onClick={logoutUser}>Logout {user.displayName}</button>
+        <button className="btn btn-sm btn-secondary m-1" onClick={getAllNotes}>
           See all user notes (For test purposes only)
         </button>
       </div>
-      <button onClick={addNote}>Add Note</button>
+      <button className="btn btn-sm btn-secondary m-1" onClick={addNote}>Add Note</button>
       <Notes
         user={user}
         notes={notes}
@@ -28,7 +28,7 @@ export default function HomePage({
 
 function Notes({ user, notes, deleteNote, editNote }) {
   return (
-    <div className="notes">
+    <div class="row">
       {notes.map((note) => {
         return (
           <Note
@@ -47,31 +47,37 @@ function Notes({ user, notes, deleteNote, editNote }) {
 function Note({ user, note, deleteNote, editNote }) {
   console.log();
   return (
-    <div className="note">
-      <button
-        onClick={deleteNote}
-        value={note.id}
-        hidden={user.uid !== note.owner.id}
-      >
-        x
-      </button>
-
-      <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
-        owner: {note.owner.name}
-        <input name="id" type="hidden" value={note.id} />
-        <input
-          name="title"
-          placeholder="Title"
-          defaultValue={note.title}
-          disabled={note.owner.id !== user.uid}
-        />
-        <textarea
-          name="text"
-          placeholder="Note"
-          defaultValue={note.text}
-          disabled={note.owner.id !== user.uid}
-        />
-      </form>
+    <div className="card col-12">
+      <div class="card-body">
+        <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
+          <label for="id" class="form-label">
+            {note.owner.name}
+          </label>
+          <button
+            type="button"
+            className="btn-close float-end"
+            aria-label="Close"
+            onClick={deleteNote}
+            value={note.id}
+            hidden={user.uid !== note.owner.id}
+          ></button>
+          <input name="id" type="hidden" value={note.id} />
+          <input
+            className="form-control"
+            name="title"
+            placeholder="Title"
+            defaultValue={note.title}
+            disabled={note.owner.id !== user.uid}
+          />
+          <textarea
+            className="form-control"
+            name="text"
+            placeholder="Note"
+            defaultValue={note.text}
+            disabled={note.owner.id !== user.uid}
+          />
+        </form>
+      </div>
     </div>
   );
 }
