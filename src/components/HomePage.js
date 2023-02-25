@@ -110,7 +110,7 @@ function AddNoteMessage({ notes }) {
   } else {
     return (
       <div className="d-flex justify-content-center align-items-center text-center pt-5 mt-5">
-        <h1 className="display-4 pt-5 mt-5">Notes you add appear here</h1>
+        <h1 className="display-4 pt-5 mt-5">Add notes here</h1>
       </div>
     );
   }
