@@ -8,20 +8,58 @@ export default function HomePage({
   logoutUser,
 }) {
   return (
-    <div class="container">
-      <div>
-        <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>Logout {user.displayName}</button>
-        <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
-          See all user notes (For test purposes only)
+    <div>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <h1 className="navbar-brand" href="#">
+          Navbar
+        </h1>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
         </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              
+            </li>
+            <li class="nav-item">
+              
+            </li>
+            <li class="nav-item">
+              
+            </li>
+            <li class="nav-item">
+
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div className="container">
+        <div>
+          <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>
+            Logout {user.displayName}
+          </button>
+          <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
+            See all user notes (For test purposes only)
+          </button>
+        </div>
+        <button className="btn btn-sm btn-dark m-1" onClick={addNote}>
+          Add Note
+        </button>
+        <Notes
+          user={user}
+          notes={notes}
+          deleteNote={deleteNote}
+          editNote={editNote}
+        />
       </div>
-      <button className="btn btn-sm btn-dark m-1" onClick={addNote}>Add Note</button>
-      <Notes
-        user={user}
-        notes={notes}
-        deleteNote={deleteNote}
-        editNote={editNote}
-      />
     </div>
   );
 }
