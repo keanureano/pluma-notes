@@ -34,7 +34,7 @@ export default function HomePage({
           </div>
         </div>
       </nav>
-      <div className="container">
+      <div className="container pt-3">
         <AddNoteMessage notes={notes} />
         <Notes
           user={user}
