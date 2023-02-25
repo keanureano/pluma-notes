@@ -83,7 +83,7 @@ function Note({ user, note, deleteNote, editNote }) {
           ></button>
           <input name="id" type="hidden" value={note.id} />
           <input
-            className="form-control mt-4 mb-2 border-0"
+            className="form-control mt-4 mb-2 border-0 fw-semibold"
             name="title"
             placeholder="Title"
             defaultValue={note.title}
