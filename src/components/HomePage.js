@@ -9,50 +9,32 @@ export default function HomePage({
 }) {
   return (
     <div>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <h1 className="navbar-brand" href="#">
-          Navbar
-        </h1>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              
-            </li>
-            <li class="nav-item">
-              
-            </li>
-            <li class="nav-item">
-              
-            </li>
-            <li class="nav-item">
-
-            </li>
-          </ul>
+      <nav className="navbar navbar-dark bg-dark px-2 px-md-5">
+        <div className="container-fluid">
+          <a href="/" className="navbar-brand display-1">
+            <img
+              src={process.env.PUBLIC_URL + "/logo192.png"}
+              alt="logo"
+              width={32}
+              height={32}
+              className="rounded-3 mx-2"
+            />
+            Pluma Notes
+          </a>
+          <div>
+            <button className="btn btn-sm btn-dark m-1" onClick={addNote}>
+              Add Note
+            </button>
+            <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
+              See All Notes
+            </button>
+            <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>
+              Logout {user.displayName}
+            </button>
+          </div>
         </div>
       </nav>
       <div className="container">
-        <div>
-          <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>
-            Logout {user.displayName}
-          </button>
-          <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
-            See all user notes (For test purposes only)
-          </button>
-        </div>
-        <button className="btn btn-sm btn-dark m-1" onClick={addNote}>
-          Add Note
-        </button>
         <Notes
           user={user}
           notes={notes}
@@ -66,7 +48,7 @@ export default function HomePage({
 
 function Notes({ user, notes, deleteNote, editNote }) {
   return (
-    <div class="container row">
+    <div className="container row">
       {notes.map((note) => {
         return (
           <Note
@@ -86,9 +68,9 @@ function Note({ user, note, deleteNote, editNote }) {
   console.log();
   return (
     <div className="card col-12 col-md-4 mx-0 mx-md-3 my-2">
-      <div class="card-body">
+      <div className="card-body">
         <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
-          <label for="id" class="form-label">
+          <label htmlFor="id" className="form-label">
             {note.owner.name}
           </label>
           <button
