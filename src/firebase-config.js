@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+// emulator
+// eslint-disable-next-line
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import {
   getAuth,
@@ -20,8 +22,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-// use emulator
-//connectFirestoreEmulator(db, "localhost", 8080);
+// emulator
+// eslint-disable-next-line
+// connectFirestoreEmulator(db, "localhost", 8080);
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
