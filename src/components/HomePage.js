@@ -35,6 +35,7 @@ export default function HomePage({
         </div>
       </nav>
       <div className="container">
+        <AddNoteMessage notes={notes} />
         <Notes
           user={user}
           notes={notes}
@@ -101,4 +102,16 @@ function Note({ user, note, deleteNote, editNote }) {
       </div>
     </div>
   );
+}
+
+function AddNoteMessage({ notes }) {
+  if (notes.length) {
+    return null;
+  } else {
+    return (
+      <div className="d-flex justify-content-center align-items-center text-center pt-5 mt-5">
+        <h1 className="display-4 pt-5 mt-5">Notes you add appear here</h1>
+      </div>
+    );
+  }
 }
