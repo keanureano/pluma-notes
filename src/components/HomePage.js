@@ -10,7 +10,7 @@ export default function HomePage({
   return (
     <div>
       <nav className="navbar navbar-dark bg-dark px-2 px-md-5">
-        <div className="container-fluid">
+        <div className="container-fluid justify-content-center justify-content-md-between">
           <a href="/" className="navbar-brand display-1">
             <img
               src={process.env.PUBLIC_URL + "/logo192.png"}
@@ -29,7 +29,7 @@ export default function HomePage({
               See All Notes
             </button>
             <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>
-              Logout {user.displayName}
+              Logout
             </button>
           </div>
         </div>
@@ -67,10 +67,10 @@ function Notes({ user, notes, deleteNote, editNote }) {
 function Note({ user, note, deleteNote, editNote }) {
   console.log();
   return (
-    <div className="card col-12 col-md-4 mx-0 mx-md-3 my-2">
+    <div className="card col-12 col-md-4 mx-0 mx-md-3 my-2 border-0 bg-light">
       <div className="card-body">
         <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
-          <label htmlFor="id" className="form-label">
+          <label htmlFor="id" className="form-label fw-semibold text-black-50">
             {note.owner.name}
           </label>
           <button
@@ -83,18 +83,19 @@ function Note({ user, note, deleteNote, editNote }) {
           ></button>
           <input name="id" type="hidden" value={note.id} />
           <input
-            className="form-control"
+            className="form-control mt-4 mb-2 border-0"
             name="title"
             placeholder="Title"
             defaultValue={note.title}
             disabled={note.owner.id !== user.uid}
           />
           <textarea
-            className="form-control"
+            className="form-control border-0"
             name="text"
             placeholder="Note"
             defaultValue={note.text}
             disabled={note.owner.id !== user.uid}
+            rows="10"
           />
         </form>
       </div>
