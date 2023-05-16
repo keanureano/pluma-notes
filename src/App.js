@@ -79,7 +79,6 @@ function App() {
     if (user) {
       getNotes();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   if (loading) {
     return <LoadingPage />;
