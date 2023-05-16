@@ -10,12 +10,16 @@ export default function HomePage({
   return (
     <div className="container">
       <div>
-        <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>Logout {user.displayName}</button>
+        <button className="btn btn-sm btn-dark m-1" onClick={logoutUser}>
+          Logout {user.displayName}
+        </button>
         <button className="btn btn-sm btn-dark m-1" onClick={getAllNotes}>
           See all user notes (For test purposes only)
         </button>
       </div>
-      <button className="btn btn-sm btn-dark m-1" onClick={addNote}>Add Note</button>
+      <button className="btn btn-sm btn-dark m-1" onClick={addNote}>
+        Add Note
+      </button>
       <Notes
         user={user}
         notes={notes}
@@ -48,7 +52,15 @@ function Note({ user, note, deleteNote, editNote }) {
   return (
     <div className="card col-12 col-md-4">
       <div className="card-body">
-        <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
+        <form
+          onSubmit={editNote}
+          onBlur={(e) => {
+            if (!e.target.form.title.value) {
+              deleteNote(note.id);
+            }
+            e.target.form.requestSubmit();
+          }}
+        >
           <label htmlFor="id" className="form-label">
             {note.owner.name}
           </label>
@@ -56,7 +68,7 @@ function Note({ user, note, deleteNote, editNote }) {
             type="button"
             className="btn-close float-end"
             aria-label="Close"
-            onClick={deleteNote}
+            onClick={() => deleteNote(note.id)}
             value={note.id}
             hidden={user.uid !== note.owner.id}
           ></button>
@@ -67,6 +79,7 @@ function Note({ user, note, deleteNote, editNote }) {
             placeholder="Title"
             defaultValue={note.title}
             disabled={note.owner.id !== user.uid}
+            autoFocus={!note.title}
           />
           <textarea
             className="form-control"

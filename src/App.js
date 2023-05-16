@@ -48,8 +48,7 @@ function App() {
     getNotes();
     console.log("added note");
   };
-  const deleteNote = (event) => {
-    const noteId = event.target.value;
+  const deleteNote = (noteId) => {
     const noteDoc = doc(db, "notes", noteId);
     deleteDoc(noteDoc);
     setNotes(notes.filter((note) => (note.id === noteDoc.id ? null : note)));
