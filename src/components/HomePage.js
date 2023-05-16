@@ -45,7 +45,6 @@ function Notes({ user, notes, deleteNote, editNote }) {
 }
 
 function Note({ user, note, deleteNote, editNote }) {
-  console.log();
   return (
     <div className="card col-12 col-md-4">
       <div className="card-body">
