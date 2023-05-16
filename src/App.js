@@ -17,7 +17,6 @@ import LoginPage from "./components/LoginPage";
 import HomePage from "./components/HomePage";
 import LoadingPage from "./components/LoadingPage";
 import ErrorPage from "./components/ErrorPage";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const [notes, setNotes] = useState([]);

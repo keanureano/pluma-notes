@@ -28,7 +28,7 @@ export default function HomePage({
 
 function Notes({ user, notes, deleteNote, editNote }) {
   return (
-    <div className="container row">
+    <div className="row gap-3 mx-2">
       {notes.map((note) => {
         return (
           <Note
@@ -47,7 +47,7 @@ function Notes({ user, notes, deleteNote, editNote }) {
 function Note({ user, note, deleteNote, editNote }) {
   console.log();
   return (
-    <div className="card col-12 col-md-4 mx-0 mx-md-3 my-2">
+    <div className="card col-12 col-md-4">
       <div className="card-body">
         <form onSubmit={editNote} onBlur={(e) => e.target.form.requestSubmit()}>
           <label htmlFor="id" className="form-label">
